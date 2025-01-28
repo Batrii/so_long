@@ -6,12 +6,11 @@
 /*   By: bnafiai <bnafiai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 14:55:29 by bnafiai           #+#    #+#             */
-/*   Updated: 2025/01/24 18:53:27 by bnafiai          ###   ########.fr       */
+/*   Updated: 2025/01/27 18:45:12 by bnafiai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-#include "get_next_line.h"
 
 void	cleanup(t_data *game)
 {
@@ -49,12 +48,16 @@ static int	valid_line(const char *line, int expected_lenght)
 	while (line[i] && line[i] != '\n')
 	{
 		if (!my_strchr2("01PEC", line[i]))
-		{
-			ft_printf("Error\nInvalid character\n");
-			return (0);
-		}
+			return (ft_printf("Error\nInvalid character\n"), 0);
 		i++;
 	}
+	return (1);
+}
+
+int	check_size_map(t_data *game)
+{
+	if (game->map_height > 54 || game->map_width > 96)
+		return (ft_printf("Error\nsize map invalide !\n"), 0);
 	return (1);
 }
 
@@ -69,20 +72,16 @@ int	valid_map_file(int fd, t_data *game, int expected_lenght)
 		if (game->map_height == 0)
 			expected_lenght = my_strlen2(line);
 		if (!valid_line(line, expected_lenght))
-		{
-			free(line);
-			return (0);
-		}
+			return (free(line), 0);
 		game->map_height++;
 		free(line);
 		line = get_next_line(fd);
 	}
 	if (game->map_height == 0)
-	{
-		ft_printf("Error\nMap empty\n");
-		return (0);
-	}
+		return (ft_printf("Error\nMap empty\n"), 0);
 	game->map_width = expected_lenght - 1;
+	if (!check_size_map(game))
+		return (0);
 	close(fd);
 	return (1);
 }

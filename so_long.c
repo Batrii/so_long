@@ -6,7 +6,7 @@
 /*   By: bnafiai <bnafiai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 20:55:54 by bnafiai           #+#    #+#             */
-/*   Updated: 2025/01/24 19:01:30 by bnafiai          ###   ########.fr       */
+/*   Updated: 2025/01/27 18:43:14 by bnafiai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ int	initial_game(char *map_path, t_data *game)
 	}
 	game->win = mlx_new_window(game->mlx, game->map_width * TILE_SIZE,
 			game->map_height * TILE_SIZE, "2D Game");
+	if (!game->win)
+		return (0);
 	put_images(game);
 	render_map(game);
 	return (0);
@@ -90,20 +92,16 @@ int	main(int argc, char **argv)
 	int		fd;
 
 	if (argc != 2 || !check_ext(argv[1], ".ber"))
-	{
-		ft_printf("Error\nIncorrect usage <map_file.ber>\n");
-		return (1);
-	}
-	game.mlx = mlx_init();
+		return (ft_printf("Error\nIncorrect usage <map_file.ber>\n")
+			, 1);
 	fd = open_map_file(argv[1]);
 	if (fd < 0 || !valid_map_file(fd, &game, 0))
-	{
 		if (fd >= 0)
-			close(fd);
-		mlx_destroy_display(game.mlx);
-		free(game.mlx);
-		return (1);
-	}
+			return (close(fd), 1);
+	game.mlx = mlx_init();
+	if (!game.mlx)
+		return (free_map(game.map, game.map_height),
+			ft_printf("Error\ninit mlx!\n"), 1);
 	initial_game(argv[1], &game);
 	game.move_score = 0;
 	game.coins_remaining = 0;
