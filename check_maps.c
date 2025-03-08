@@ -6,12 +6,12 @@
 /*   By: bnafiai <bnafiai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 17:29:48 by bnafiai           #+#    #+#             */
-/*   Updated: 2025/01/27 18:44:09 by bnafiai          ###   ########.fr       */
+/*   Updated: 2025/03/08 17:12:05 by bnafiai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
+ 
 void	check_map(t_data *game)
 {
 	int	y;
